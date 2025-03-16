@@ -1,1 +1,7 @@
 Crear un pipeline en Jenkins, usar el script proporcionado en "Scriptpipeline"
+Otorgar permisos adecuados sobre el usuario Jenkins en el sistema Linux donde se utilizará
+Ejecutar pipeline en jenkins con "Build with Parameters"
+Completar los campos con la información del usuario que desea crear
+En el log console se puede ver la contraseña temporal para el usuario
+
+ERROR: Al intentar cambiar la contraseña del usuario arroja el siguiente prompt: "su: Authentication token manipulation error" No se encontró solución.
