@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NOMBRE', description: 'Ingrese el nombre del usuario')
+        string(name: 'APELLIDO', description: 'Ingrese el apellido del usuario')
+        string(name: 'SECTOR', description: 'Ingrese el sector o departamento')
+    }
+
+    stages {
+        stage('Crear Usuario en Linux') {
+            steps {
+                script {
+                    // Capturar parámetros ingresados por el usuario
+                    def nombre = params.NOMBRE
+                    def apellido = params.APELLIDO
+                    def sector = params.SECTOR
+
+                    // Generar username y contraseña temporal
+                    def username = "${nombre.toLowerCase()}.${apellido.toLowerCase()}"
+                    def password = sh(returnStdout: true, script: "openssl rand -base64 12").trim()
+
+                    // Crear usuario en el sistema Linux
+                    sh """
+                    sudo useradd -m -c '${nombre} ${apellido}, ${sector}' ${username}
+                    echo '${username}:${password}' | sudo chpasswd
+                    sudo chage -d 0 ${username}
+                    echo "Usuario creado exitosamente: ${username}"
+                    echo "Contraseña temporal: ${password}"
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado.'
+        }
+    }
+}
